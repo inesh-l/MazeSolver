@@ -81,7 +81,7 @@ def draw_path(img, path, thickness=2):
         x0, y0 = vertex
 
 
-def find_shortest_path(img, src, dst):
+def find_shortest_path(img: object, src: object, dst: object) -> object:
     pq = []  # min-heap priority queue
     source_x = src[0]
     source_y = src[1]
@@ -126,18 +126,35 @@ def find_shortest_path(img, src, dst):
     return path
 
 
+
 img = cv2.imread('maze.png')  # read the image
 cv2.circle(img, (5, 220), 3, (255, 0, 0), -1)  # add a circle at (5, 220)
 cv2.circle(img, (25, 5), 3, (0, 0, 255), -1)  # add a circle at (5,5)
 plt.figure(figsize=(7, 7))
 plt.imshow(img)
-plt.show()
 
 img = cv2.imread('maze.png')  # read image
 cv2.imwrite('maze-initial.png', img)
 p = find_shortest_path(img, (25, 5), (5, 220))
 draw_path(img, p)
-cv2.imwrite('maze-solution.png', img)
+cv2.imwrite('./static/maze-solution.png', img)
 plt.figure(figsize=(7, 7))
 plt.imshow(img)  # show the image on the screen
 plt.show()
+
+
+def do_modified(file, xStart, yStart, xEnd, yEnd):
+    img = cv2.imread('maze.png')  # read the image
+    cv2.circle(img, (5, 220), 3, (255, 0, 0), -1)  # add a circle at (5, 220)
+    cv2.circle(img, (25, 5), 3, (0, 0, 255), -1)  # add a circle at (5,5)
+    plt.figure(figsize=(7, 7))
+    plt.imshow(img)
+
+    img = cv2.imread('maze.png')  # read image
+    cv2.imwrite('maze-initial.png', img)
+    p = find_shortest_path(img, (25, 5), (5, 220))
+    draw_path(img, p)
+    cv2.imwrite('./static/maze-solution.png', img)
+    plt.figure(figsize=(7, 7))
+    plt.imshow(img)  # show the image on the screen
+

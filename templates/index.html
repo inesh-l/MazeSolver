@@ -1,21 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>MazeSolver</title>
-    <link rel="stylesheet" href="../static/styles.css">
-  </head>
-  <body>
-    <div class="is-flex is-justify-content-center">
-      <h1 class="title">Maze Solver</h1>
-    </div>
-    <form action = "http://localhost:5000/" method = "POST" enctype = "multipart/form-data">
-       <input type = "file" name = "file" />
-       <input type = "submit"/>
+    <title>Title</title>
+</head>
+<body>
+    <canvas id="mazeCanvas" width="200" height="100" style="border:1px solid #000000;">
+    </canvas>
+    <form method="post" enctype="multipart/form-data">
+
+        <input type="file" id="upload" accept="image/png" name="maze">
+        <p id="starting">Starting point: ()</p>
+        <p id="ending">Ending point: ()</p>
+        <button type="submit">
+            Submit
+        </button>
     </form>
+    <script>
+        let imageLoader = document.getElementById('upload');
+            imageLoader.addEventListener('change', addToCanvas, false);
+        let canvas = document.getElementById('mazeCanvas');
+        let ctx = canvas.getContext("2d");
+        let points = [];
+        canvas.addEventListener("mousedown", function (e) {
+            if (points.length < 4) {
+                points.push(e.x - canvas.offsetLeft);
+                points.push(e.y - canvas.offsetLeft);
+                ctx.beginPath();
+                ctx.arc(e.x - canvas.offsetLeft, e.y - canvas.offsetTop, 2, 0, 2 * Math.PI)
+                ctx.stroke();
+            }
+            let start = document.getElementById("starting");
+            let end = document.getElementById("ending");
+            start.innerText = "Starting point: (" +  points[0] + ", " + points[1] + ")";
+            end.innerText = "Ending points: (" +  points[2] + ", " + points[3] + ")";
+        })
+        function addToCanvas(e){
 
+            let reader = new FileReader();
+            reader.onload = function(event){
+                let img = new Image();
+                img.onload = function(){
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img,0,0);
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    </script>
 
-
-
-  </body>
+</body>
 </html>
