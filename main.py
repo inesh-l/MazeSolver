@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# Helper functions and classes
 class Vertex:
     def __init__(self, x_coord, y_coord):
         self.x = x_coord
@@ -16,7 +15,6 @@ class Vertex:
         self.index_in_queue = None
 
 
-# Return neighbor directly above, below, right, and left
 def get_neighbors(mat, r, c):
     shape = mat.shape
     neighbors = []
@@ -87,10 +85,10 @@ def find_shortest_path(img: object, src: object, dst: object) -> object:
     source_y = src[1]
     dest_x = dst[0]
     dest_y = dst[1]
-    imagerows, imagecols = img.shape[0], img.shape[1]
-    matrix = np.full((imagerows, imagecols), None)  # access by matrix[row][col]
-    for r in range(imagerows):
-        for c in range(imagecols):
+    img_rows, img_cols = img.shape[0], img.shape[1]
+    matrix = np.full((img_rows, img_cols), None)  # access by matrix[row][col]
+    for r in range(img_rows):
+        for c in range(img_cols):
             matrix[r][c] = Vertex(c, r)
             matrix[r][c].index_in_queue = len(pq)
             pq.append(matrix[r][c])
@@ -126,32 +124,18 @@ def find_shortest_path(img: object, src: object, dst: object) -> object:
     return path
 
 
-
-img = cv2.imread('maze.png')  # read the image
-cv2.circle(img, (5, 220), 3, (255, 0, 0), -1)  # add a circle at (5, 220)
-cv2.circle(img, (25, 5), 3, (0, 0, 255), -1)  # add a circle at (5,5)
-plt.figure(figsize=(7, 7))
-plt.imshow(img)
-
-img = cv2.imread('maze.png')  # read image
-cv2.imwrite('maze-initial.png', img)
-p = find_shortest_path(img, (25, 5), (5, 220))
-draw_path(img, p)
-cv2.imwrite('./static/maze-solution.png', img)
-plt.figure(figsize=(7, 7))
-plt.imshow(img)  # show the image on the screen
-plt.show()
-
-
-def do_modified(file, xStart, yStart, xEnd, yEnd):
-    img = cv2.imread('maze.png')  # read the image
-    cv2.circle(img, (5, 220), 3, (255, 0, 0), -1)  # add a circle at (5, 220)
-    cv2.circle(img, (25, 5), 3, (0, 0, 255), -1)  # add a circle at (5,5)
+def do_modified(xStart, yStart, xEnd, yEnd):
+    img = cv2.imread('./static/uploads/maze.png')  # read the image
+    print(xStart);
+    print(xEnd);
+    print(yStart);
+    print(yEnd);
+    cv2.circle(img, (int(xStart), int(yStart)), 3, (255, 0, 0), -1)  # add a circle at (5, 220)
+    cv2.circle(img, (int(xEnd), int(yEnd)), 3, (0, 0, 255), -1)  # add a circle at (5,5)
     plt.figure(figsize=(7, 7))
     plt.imshow(img)
 
-    img = cv2.imread('maze.png')  # read image
-    cv2.imwrite('maze-initial.png', img)
+    img = cv2.imread('./static/uploads/maze.png')  # read image
     p = find_shortest_path(img, (25, 5), (5, 220))
     draw_path(img, p)
     cv2.imwrite('./static/maze-solution.png', img)

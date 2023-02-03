@@ -7,21 +7,21 @@
 <body>
     <canvas id="mazeCanvas" width="200" height="100" style="border:1px solid #000000;">
     </canvas>
-    <form method="post" enctype="multipart/form-data">
 
-        <input type="file" id="upload" accept="image/png" name="maze">
-        <p id="starting">Starting point: ()</p>
-        <p id="ending">Ending point: ()</p>
-        <button type="submit">
-            Submit
-        </button>
-    </form>
+    <input type="file" id="upload" accept="image/png" name="maze">
+    <p id="starting">Starting point: ()</p>
+    <p id="ending">Ending point: ()</p>
+    <button id="submit" onclick="submitForm()" href="/solved">
+        Submit
+    </button>
+
     <script>
         let imageLoader = document.getElementById('upload');
             imageLoader.addEventListener('change', addToCanvas, false);
         let canvas = document.getElementById('mazeCanvas');
         let ctx = canvas.getContext("2d");
         let points = [];
+        let submitButton = document.getElementById("submit");
         canvas.addEventListener("mousedown", function (e) {
             if (points.length < 4) {
                 points.push(e.x - canvas.offsetLeft);
@@ -48,6 +48,21 @@
                 img.src = event.target.result;
             }
             reader.readAsDataURL(e.target.files[0]);
+        }
+        async function submitForm() {
+            const formData = new FormData();
+
+            formData.append("maze", imageLoader.files[0]);
+            formData.append("startX", points[0]);
+            formData.append("startY", points[1]);
+            formData.append("endX", points[2]);
+            formData.append("endY", points[3]);
+            const response = await fetch('/solve', {
+                method: 'POST',
+                body: formData
+            })
+            window.location.replace("solved");
+            return response
         }
     </script>
 
